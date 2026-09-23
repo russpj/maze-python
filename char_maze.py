@@ -11,14 +11,13 @@ app_name = 'char_maze.py'
 
 def main(arguments):
     program_name = app_name
-    command_line_documentation = f'{program_name} --help --verbose --part [1|2] --file [input file]'
+    command_line_documentation = \
+        f'{program_name} --help --verbose columns rows'
     verbose = False
-    input_file_name = ''
-    parts = []
 
     try:
-        opts, args = getopt(arguments, "hvp:f:", ("help", "verbose", "part=", "file="))
-    except GetoptError:
+        opts, args = getopt(arguments, "hv", ("help", "verbose"))
+    except GetoptError as error:
         print(f'Invalid Arguments: {command_line_documentation}')
         exit(2)
 
@@ -30,23 +29,15 @@ def main(arguments):
         if opt in ('-v', '--verbose'):
             verbose = True
 
-        if opt in ('-f', '--file'):
-            input_file_name = arg
-
-        if opt in ('-p', '--part'):
-            for part in arg:
-                parts.append(part)
-
-    if input_file_name:
-        with open(input_file_name, 'r') as input_file:
-            if verbose:
-                print(f'Opened {input_file_name} for {app_name}')
+    if len(args) != 2:
+        print(f'Invalid Arguments: {command_line_documentation}')
+        exit(2)
+    columns = args[0]
+    rows = args[1]
 
     time_start = process_time()
-    for part in parts:
-        print(f'Processing part {part}')
     if verbose:
-        print('Debugging output goes here')
+        print(f'{program_name} with columns={columns}, rows={rows}')
     time_end = process_time()
     print(f'Time taken: {time_end - time_start} seconds.')
 
