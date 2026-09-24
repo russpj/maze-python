@@ -95,6 +95,7 @@ class Maze:
             pos_neighbors.append((row, col-1))
         if col < self.columns-1:
             pos_neighbors.append((row, col+1))
+        self.random.shuffle(pos_neighbors)
         return pos_neighbors
         
 
