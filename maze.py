@@ -22,9 +22,9 @@ class _Grid_Graph():
 
 class Cell_Type(Enum):
     WALL = 1
-    UNTOUCHED = 1
-    TENTATIVE = 2
-    SOLUTION = 3
+    UNTOUCHED = 2
+    TENTATIVE = 3
+    SOLUTION = 4
 
 
 class Cell:
@@ -45,14 +45,17 @@ class Maze_Map:
         self.map = map
         return
 
-    def cell_type(self, column, row):
-        cell = self.map[row][column]
-        return cell.cell_type
-
     def map_coords(self, graph_coords):
         graph_col = graph_coords[0]
         graph_row = graph_coords[1]
         return (graph_col*2+1, graph_row*2+1)
+
+    def cell_type(self, coords):
+        cell = self.map[coords[1]][coords[0]]
+        return cell.cell_type
+
+    def set_cell_type(self, coords, cell_type):
+        self.map[coords[1]][coords[0]] = Cell(cell_type)
 
 
 class Maze:
@@ -60,8 +63,15 @@ class Maze:
         self.columns = columns
         self.rows = rows
         self.graph = _Grid_Graph(columns, rows)
-        self.map = Maze_Map(columns, rows)
         return
+
+    def maze_map(self):
+        map = Maze_Map(self.columns, self.rows)
+        for row in range(self.rows):
+            for col in range(self.columns):
+                map_coords = map.map_coords((col, row))
+                map.set_cell_type(map_coords, Cell_Type.UNTOUCHED)
+        return map
 
 
 class Test_Cell(unittest.TestCase):
@@ -93,10 +103,11 @@ class Test_Maze(unittest.TestCase):
         self.assertEqual(maze.columns, 10)
         self.assertEqual(maze.rows, 20)
         self.assertEqual(maze.graph.neighbors(5, 10), [])
-        self.assertEqual(maze.map.cell_type(0,0), Cell_Type.WALL)
-        map_coord_cel = maze.map.map_coords((5, 10))
-        cell_type = maze.map.cell_type(map_coord_cel[0], map_coord_cel[1])
-        self.assertEqual(cell_type, Cell_Type.WALL)
+        map = maze.maze_map()
+        self.assertEqual(map.cell_type((0,0)), Cell_Type.WALL)
+        map_coords_cell = map.map_coords((5, 10))
+        cell_type = map.cell_type(map_coords_cell)
+        self.assertEqual(cell_type, Cell_Type.UNTOUCHED)
 
 
 if __name__ == '__main__':
