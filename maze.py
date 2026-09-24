@@ -71,6 +71,8 @@ class Maze:
         self.columns = columns
         self.rows = rows
         self.graph = _Grid_Graph(rows, columns)
+        self.random = random.Random()
+        self.random.seed()
         return
 
     def maze_map(self):
@@ -81,8 +83,10 @@ class Maze:
                 map.set_cell_type(map_coords, Cell_Type.UNTOUCHED)
         return map
 
+    def possible_neighbors(coords):
+        ...
+
     def create_maze_dfs(self):
-        random.seed()
         grid = self.graph.grid
         rows = len(grid)
         if rows == 0:
@@ -90,8 +94,8 @@ class Maze:
         cols = len(grid[0])
         if cols == 0:
             return
-        self.start_cell = (0, random.randrange(0, self.columns))
-        self.end_cell = (self.rows-1, random.randrange(0, self.columns))
+        self.start_cell = (0, self.random.randrange(0, self.columns))
+        self.end_cell = (self.rows-1, self.random.randrange(0, self.columns))
         visited_cells = set()
         return
     
