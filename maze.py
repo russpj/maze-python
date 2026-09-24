@@ -92,6 +92,9 @@ class Maze:
                     col_passage = mean([map_coords[1], n_coords[1]])
                     map.set_cell_type((row_passage, col_passage), 
                                       Cell_Type.UNTOUCHED)
+
+        map.set_cell_type(map.map_coords(self.start_cell), Cell_Type.SOLUTION)
+        map.set_cell_type(map.map_coords(self.end_cell), Cell_Type.SOLUTION)
         return map
 
     def possible_neighbors(self, coords):

@@ -16,13 +16,13 @@ def print_map(maze_map):
         for col in range(len(map[row])):
             cell_type = maze_map.cell_type((row, col))
             if cell_type == Cell_Type.WALL:
-                cell_ch = 'X'
+                cell_ch = 'XX'
             elif cell_type == Cell_Type.TENTATIVE:
-                cell_ch = '.'
+                cell_ch = '++'
             elif cell_type == Cell_Type.SOLUTION:
-                cell_ch = '+'
+                cell_ch = '()'
             else:
-                cell_ch = ' '
+                cell_ch = '  '
             print(cell_ch, end='')
         print()
 
