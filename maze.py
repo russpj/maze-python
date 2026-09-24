@@ -4,6 +4,19 @@ import unittest
 from enum import Enum
 
 
+class _Grid_Graph():
+    ''' a lightweight graph helper class'''
+    def __init__(self, columns, rows):
+        self.grid = []
+        for row_index in range(rows):
+            column = []
+            for col_index in range(columns):
+                neighbors = []
+                column.append(neighbors)
+            self.grid.append(column)
+        return
+
+
 class Cell_Type(Enum):
     WALL = 1
     UNTOUCHED = 1
@@ -17,17 +30,16 @@ class Cell:
         return
 
 
-class _Grid_Graph():
-    ''' a lightweight graph helper clas'''
-    def __init__(self, columns, rows):
-        self.grid = []
-        for row_index in range(rows):
-            column = []
-            for col_index in range(columns):
-                neighbors = []
-                column.append(neighbors)
-            self.grid.append(column)
-        return
+class Maze_Map:
+    def __init__(self, graph_columns, graph_rows):
+        map = []
+        self.map = map
+        for map_row in range(2*graph_rows+1):
+            row = []
+            for map_col in range(2*graph_columns+1):
+                row.append(Cell(Cell_Type.WALL))
+            map.append(row)
+        self.map = map
 
 
 class Maze:
@@ -50,6 +62,13 @@ class Test_Graph(unittest.TestCase):
         grid = graph.grid
         self.assertEqual(len(grid), 20)
         self.assertEqual(len(grid[0]), 10)
+
+
+class Test_Maze_Map(unittest.TestCase):
+    def test_init(self):
+        map = Maze_Map(10, 20)
+        self.assertEqual(len(map.map), 41)
+        self.assertEqual(len(map.map[0]), 21)
 
 
 class Test_Maze(unittest.TestCase):
