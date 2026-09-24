@@ -8,7 +8,10 @@ class _Grid_Graph():
     def __init__(self, columns, rows):
         self.grid = []
         for row_index in range(rows):
-            column = [[]]*columns
+            column = []
+            for col_index in range(columns):
+                neighbors = []
+                column.append(neighbors)
             self.grid.append(column)
         return
 
