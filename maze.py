@@ -45,6 +45,10 @@ class Maze_Map:
         self.map = map
         return
 
+    def cell_type(self, column, row):
+        cell = self.map[row][column]
+        return cell.cell_type
+
     def map_coords(self, graph_coords):
         graph_col = graph_coords[0]
         graph_row = graph_coords[1]
@@ -56,6 +60,7 @@ class Maze:
         self.columns = columns
         self.rows = rows
         self.graph = _Grid_Graph(columns, rows)
+        self.map = Maze_Map(columns, rows)
         return
 
 
@@ -88,6 +93,10 @@ class Test_Maze(unittest.TestCase):
         self.assertEqual(maze.columns, 10)
         self.assertEqual(maze.rows, 20)
         self.assertEqual(maze.graph.neighbors(5, 10), [])
+        self.assertEqual(maze.map.cell_type(0,0), Cell_Type.WALL)
+        map_coord_cel = maze.map.map_coords((5, 10))
+        cell_type = maze.map.cell_type(map_coord_cel[0], map_coord_cel[1])
+        self.assertEqual(cell_type, Cell_Type.WALL)
 
 
 if __name__ == '__main__':
