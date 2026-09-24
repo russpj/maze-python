@@ -40,6 +40,12 @@ class Maze_Map:
                 row.append(Cell(Cell_Type.WALL))
             map.append(row)
         self.map = map
+        return
+
+    def map_coords(self, graph_coords):
+        graph_col = graph_coords[0]
+        graph_row = graph_coords[1]
+        return (graph_col*2+1, graph_row*2+1)
 
 
 class Maze:
@@ -69,6 +75,7 @@ class Test_Maze_Map(unittest.TestCase):
         map = Maze_Map(10, 20)
         self.assertEqual(len(map.map), 41)
         self.assertEqual(len(map.map[0]), 21)
+        self.assertEqual(map.map_coords((5, 10)), (11, 21))
 
 
 class Test_Maze(unittest.TestCase):
