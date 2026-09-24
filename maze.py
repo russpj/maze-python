@@ -1,6 +1,20 @@
 ''' Maze Class'''
 
 import unittest
+from enum import Enum
+
+
+class Cell_Type(Enum):
+    WALL = 1
+    UNTOUCHED = 1
+    TENTATIVE = 2
+    SOLUTION = 3
+
+
+class Cell:
+    def __init__(self, cell_type):
+        self.cell_type = cell_type
+        return
 
 
 class _Grid_Graph():
@@ -20,6 +34,13 @@ class Maze:
     def __init__(self, columns, rows):
         self.columns = columns
         self.rows = rows
+        return
+
+
+class Test_Cell(unittest.TestCase):
+    def test_init(self):
+        cell = Cell(Cell_Type.WALL)
+        self.assertEqual(cell.cell_type, Cell_Type.WALL)
         return
 
 
