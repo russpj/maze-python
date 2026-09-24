@@ -16,6 +16,9 @@ class _Grid_Graph():
             self.grid.append(column)
         return
 
+    def neighbors(self, col, row):
+        return self.grid[row][col]
+
 
 class Cell_Type(Enum):
     WALL = 1
@@ -52,6 +55,7 @@ class Maze:
     def __init__(self, columns, rows):
         self.columns = columns
         self.rows = rows
+        self.graph = _Grid_Graph(columns, rows)
         return
 
 
@@ -83,6 +87,7 @@ class Test_Maze(unittest.TestCase):
         maze = Maze(10, 20)
         self.assertEqual(maze.columns, 10)
         self.assertEqual(maze.rows, 20)
+        self.assertEqual(maze.graph.neighbors(5, 10), [])
 
 
 if __name__ == '__main__':
