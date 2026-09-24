@@ -110,6 +110,18 @@ class Maze:
         self.start_cell = (0, self.random.randrange(0, self.columns))
         self.end_cell = (self.rows-1, self.random.randrange(0, self.columns))
         visited_cells = set()
+
+        def explore(position):
+            visited_cells.add(position)
+            next_steps = self.possible_neighbors(position)
+            for step in next_steps:
+                if step in visited_cells:
+                    continue
+                self.graph.set_neighbors(position, step)
+                explore(step)
+            return
+
+        explore(self.start_cell)
         return
     
     
