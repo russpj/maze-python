@@ -3,6 +3,7 @@
 import unittest
 from enum import Enum
 import random
+from statistics import mean
 
 
 class _Grid_Graph():
@@ -80,7 +81,17 @@ class Maze:
         for row in range(self.rows):
             for col in range(self.columns):
                 map_coords = map.map_coords((row, col))
+                # the original rooms are not walls
                 map.set_cell_type(map_coords, Cell_Type.UNTOUCHED)
+
+                # paths between neighbors are not walls
+                position = (row, col)
+                neighbors = self.graph.neighbors(row, col)
+                for neighbor in neighbors:
+                    row_passage = mean(row, neighbor[0])
+                    col_passage = mean(col, neighbor[1])
+                    map_coords = map.map_coords((row_passage, col_passage))
+                    map.set_cell_type(map_coords, Cell_Type.UNTOUCHED)
         return map
 
     def possible_neighbors(self, coords):
