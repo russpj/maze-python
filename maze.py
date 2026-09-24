@@ -6,7 +6,7 @@ from enum import Enum
 
 class _Grid_Graph():
     ''' a lightweight graph helper class'''
-    def __init__(self, columns, rows):
+    def __init__(self, rows, columns):
         self.grid = []
         for row_index in range(rows):
             column = []
@@ -16,8 +16,15 @@ class _Grid_Graph():
             self.grid.append(column)
         return
 
-    def neighbors(self, col, row):
+    def neighbors(self, row, col):
         return self.grid[row][col]
+
+    def set_neighbors(self, coords1, coords2):
+        grid = self.grid
+        neighbors1 = grid[coords1[0]][coords1[1]]
+        neighbors1.append(coords2)
+        neighbors2 = grid[coords2[0]][coords2[1]]
+        neighbors2.append(coords1)
 
 
 class Cell_Type(Enum):
@@ -34,7 +41,7 @@ class Cell:
 
 
 class Maze_Map:
-    def __init__(self, graph_columns, graph_rows):
+    def __init__(self, graph_rows, graph_columns):
         map = []
         self.map = map
         for map_row in range(2*graph_rows+1):
@@ -46,34 +53,45 @@ class Maze_Map:
         return
 
     def map_coords(self, graph_coords):
-        graph_col = graph_coords[0]
-        graph_row = graph_coords[1]
-        return (graph_col*2+1, graph_row*2+1)
+        graph_row = graph_coords[0]
+        graph_col = graph_coords[1]
+        return (graph_row*2+1, graph_col*2+1)
 
     def cell_type(self, coords):
-        cell = self.map[coords[1]][coords[0]]
+        cell = self.map[coords[0]][coords[1]]
         return cell.cell_type
 
     def set_cell_type(self, coords, cell_type):
-        self.map[coords[1]][coords[0]] = Cell(cell_type)
+        self.map[coords[0]][coords[1]] = Cell(cell_type)
 
 
 class Maze:
-    def __init__(self, columns, rows):
+    def __init__(self, rows, columns):
         self.columns = columns
         self.rows = rows
-        self.graph = _Grid_Graph(columns, rows)
+        self.graph = _Grid_Graph(rows, columns)
         return
 
     def maze_map(self):
-        map = Maze_Map(self.columns, self.rows)
+        map = Maze_Map(self.rows, self.columns)
         for row in range(self.rows):
             for col in range(self.columns):
-                map_coords = map.map_coords((col, row))
+                map_coords = map.map_coords((row, col))
                 map.set_cell_type(map_coords, Cell_Type.UNTOUCHED)
         return map
 
+    def create_maze_dfs(self):
+        visited_cells = set()
+        graph = self.graph
+        rows = len(graph)
+        if rows == 0:
+            return
+        cols = len(graph[0])
+        if cols == 0:
+            return
+        return
 
+    
 class Test_Cell(unittest.TestCase):
     def test_init(self):
         cell = Cell(Cell_Type.WALL)
@@ -83,29 +101,36 @@ class Test_Cell(unittest.TestCase):
 
 class Test_Graph(unittest.TestCase):
     def test_init(self):
-        graph = _Grid_Graph(10, 20)
+        graph = _Grid_Graph(20, 10)
         grid = graph.grid
         self.assertEqual(len(grid), 20)
         self.assertEqual(len(grid[0]), 10)
+        self.assertEqual(grid[10][5], [])
+
+    def test_neighbors(self):
+        graph = _Grid_Graph(20, 10)
+        graph.set_neighbors((5, 6), (5, 7))
+        self.assertTrue((5,6) in graph.neighbors(5, 7))
+        self.assertTrue((5,7) in graph.neighbors(5, 6))
 
 
 class Test_Maze_Map(unittest.TestCase):
     def test_init(self):
-        map = Maze_Map(10, 20)
+        map = Maze_Map(20, 10)
         self.assertEqual(len(map.map), 41)
         self.assertEqual(len(map.map[0]), 21)
-        self.assertEqual(map.map_coords((5, 10)), (11, 21))
+        self.assertEqual(map.map_coords((10, 5)), (21, 11))
 
 
 class Test_Maze(unittest.TestCase):
     def test_init(self):
-        maze = Maze(10, 20)
+        maze = Maze(20, 10)
         self.assertEqual(maze.columns, 10)
         self.assertEqual(maze.rows, 20)
-        self.assertEqual(maze.graph.neighbors(5, 10), [])
+        self.assertEqual(maze.graph.neighbors(10, 5), [])
         map = maze.maze_map()
         self.assertEqual(map.cell_type((0,0)), Cell_Type.WALL)
-        map_coords_cell = map.map_coords((5, 10))
+        map_coords_cell = map.map_coords((10, 5))
         cell_type = map.cell_type(map_coords_cell)
         self.assertEqual(cell_type, Cell_Type.UNTOUCHED)
 
