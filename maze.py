@@ -85,13 +85,13 @@ class Maze:
                 map.set_cell_type(map_coords, Cell_Type.UNTOUCHED)
 
                 # paths between neighbors are not walls
-                position = (row, col)
                 neighbors = self.graph.neighbors(row, col)
                 for neighbor in neighbors:
-                    row_passage = mean(row, neighbor[0])
-                    col_passage = mean(col, neighbor[1])
-                    map_coords = map.map_coords((row_passage, col_passage))
-                    map.set_cell_type(map_coords, Cell_Type.UNTOUCHED)
+                    n_coords = map.map_coords(neighbor)
+                    row_passage = mean([map_coords[0], n_coords[0]])
+                    col_passage = mean([map_coords[1], n_coords[1]])
+                    map.set_cell_type((row_passage, col_passage), 
+                                      Cell_Type.UNTOUCHED)
         return map
 
     def possible_neighbors(self, coords):

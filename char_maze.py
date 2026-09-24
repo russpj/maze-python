@@ -58,6 +58,7 @@ def main(arguments):
         print(f'{program_name} with columns={columns}, rows={rows}')
 
     maze = Maze(rows, columns)
+    maze.create_maze_dfs()
     map = maze.maze_map()
     print_map(map)
 
