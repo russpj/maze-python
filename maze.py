@@ -83,8 +83,20 @@ class Maze:
                 map.set_cell_type(map_coords, Cell_Type.UNTOUCHED)
         return map
 
-    def possible_neighbors(coords):
-        ...
+    def possible_neighbors(self, coords):
+        pos_neighbors = []
+        row = coords[0]
+        col = coords[1]
+        if row > 0:
+            pos_neighbors.append((row-1, col))
+        if row < self.rows-1:
+            pos_neighbors.append((row+1, col))
+        if col > 0:
+            pos_neighbors.append((row, col-1))
+        if col < self.columns-1:
+            pos_neighbors.append((row, col+1))
+        return pos_neighbors
+        
 
     def create_maze_dfs(self):
         grid = self.graph.grid
@@ -141,6 +153,13 @@ class Test_Maze(unittest.TestCase):
         map_coords_cell = map.map_coords((10, 5))
         cell_type = map.cell_type(map_coords_cell)
         self.assertEqual(cell_type, Cell_Type.UNTOUCHED)
+
+    def test_pos_neighbors(self):
+        maze = Maze(20, 10)
+        pn = maze.possible_neighbors((0,0))
+        self.assertEqual(len(pn), 2)
+        self.assertTrue((0,1) in pn)
+        self.assertTrue((1,0) in pn)
 
     def test_dfs(self):
         maze = Maze(20, 10)
