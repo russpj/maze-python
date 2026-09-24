@@ -2,6 +2,7 @@
 
 import unittest
 from enum import Enum
+import random
 
 
 class _Grid_Graph():
@@ -81,16 +82,19 @@ class Maze:
         return map
 
     def create_maze_dfs(self):
-        visited_cells = set()
-        graph = self.graph
-        rows = len(graph)
+        random.seed()
+        grid = self.graph.grid
+        rows = len(grid)
         if rows == 0:
             return
-        cols = len(graph[0])
+        cols = len(grid[0])
         if cols == 0:
             return
+        self.start_cell = (0, random.randrange(0, self.columns))
+        self.end_cell = (self.rows-1, random.randrange(0, self.columns))
+        visited_cells = set()
         return
-
+    
     
 class Test_Cell(unittest.TestCase):
     def test_init(self):
@@ -134,6 +138,12 @@ class Test_Maze(unittest.TestCase):
         cell_type = map.cell_type(map_coords_cell)
         self.assertEqual(cell_type, Cell_Type.UNTOUCHED)
 
+    def test_dfs(self):
+        maze = Maze(20, 10)
+        maze.create_maze_dfs()
+        self.assertEqual(maze.start_cell[0], 0)
+        self.assertEqual(maze.end_cell[0], maze.rows-1)
+        
 
 if __name__ == '__main__':
     unittest.main()
