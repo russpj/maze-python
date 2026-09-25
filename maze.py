@@ -45,10 +45,11 @@ class Cell:
 class Maze_Map:
     def __init__(self, graph_rows, graph_columns):
         map = []
-        self.map = map
-        for map_row in range(2*graph_rows+1):
+        (self.num_rows, self.num_columns) = \
+            self.map_coords((graph_rows, graph_columns))
+        for map_row in range(self.num_rows):
             row = []
-            for map_col in range(2*graph_columns+1):
+            for map_col in range(self.num_columns):
                 row.append(Cell(Cell_Type.WALL))
             map.append(row)
         self.map = map
@@ -74,6 +75,8 @@ class Maze:
         self.graph = _Grid_Graph(rows, columns)
         self.random = random.Random()
         self.random.seed()
+        self.start_cell = None
+        self.end_cell = None
         return
 
     def maze_map(self):
@@ -93,8 +96,12 @@ class Maze:
                     map.set_cell_type((row_passage, col_passage), 
                                       Cell_Type.UNTOUCHED)
 
-        map.set_cell_type(map.map_coords(self.start_cell), Cell_Type.SOLUTION)
-        map.set_cell_type(map.map_coords(self.end_cell), Cell_Type.SOLUTION)
+        if self.start_cell:
+            coords = map.map_coords(self.start_cell)
+            map.set_cell_type(coords, Cell_Type.SOLUTION)
+        if self.end_cell:
+            coords = map.map_coords(self.end_cell)
+            map.set_cell_type(coords, Cell_Type.SOLUTION)
         return map
 
     def possible_neighbors(self, coords):
@@ -164,8 +171,8 @@ class Test_Graph(unittest.TestCase):
 class Test_Maze_Map(unittest.TestCase):
     def test_init(self):
         map = Maze_Map(20, 10)
-        self.assertEqual(len(map.map), 41)
-        self.assertEqual(len(map.map[0]), 21)
+        self.assertEqual(map.num_rows, 41)
+        self.assertEqual(map.num_columns, 21)
         self.assertEqual(map.map_coords((10, 5)), (21, 11))
 
 
