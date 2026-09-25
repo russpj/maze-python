@@ -4,7 +4,7 @@
 from sys import stdin, stdout, stderr, argv
 from getopt import getopt, GetoptError
 from time import process_time
-from maze import Maze, Cell_Type, Maze_Map
+from maze import Maze, Cell_Type
 
 
 app_name = 'char_maze.py'
