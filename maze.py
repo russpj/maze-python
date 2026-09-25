@@ -36,7 +36,7 @@ class Cell_Type(Enum):
     SOLUTION = 4
 
 
-class Cell:
+class _Cell:
     def __init__(self, cell_type):
         self.cell_type = cell_type
         return
@@ -50,7 +50,7 @@ class Maze_Map:
         for map_row in range(self.num_rows):
             row = []
             for map_col in range(self.num_columns):
-                row.append(Cell(Cell_Type.WALL))
+                row.append(_Cell(Cell_Type.WALL))
             map.append(row)
         self.map = map
         return
@@ -65,7 +65,7 @@ class Maze_Map:
         return cell.cell_type
 
     def set_cell_type(self, coords, cell_type):
-        self.map[coords[0]][coords[1]] = Cell(cell_type)
+        self.map[coords[0]][coords[1]] = _Cell(cell_type)
 
 
 class Maze:
@@ -104,7 +104,7 @@ class Maze:
             map.set_cell_type(coords, Cell_Type.SOLUTION)
         return map
 
-    def possible_neighbors(self, coords):
+    def _possible_neighbors(self, coords):
         pos_neighbors = []
         row = coords[0]
         col = coords[1]
@@ -134,7 +134,7 @@ class Maze:
 
         def explore(position):
             visited_cells.add(position)
-            next_steps = self.possible_neighbors(position)
+            next_steps = self._possible_neighbors(position)
             for step in next_steps:
                 if step in visited_cells:
                     continue
@@ -148,7 +148,7 @@ class Maze:
     
 class Test_Cell(unittest.TestCase):
     def test_init(self):
-        cell = Cell(Cell_Type.WALL)
+        cell = _Cell(Cell_Type.WALL)
         self.assertEqual(cell.cell_type, Cell_Type.WALL)
         return
 
@@ -190,7 +190,7 @@ class Test_Maze(unittest.TestCase):
 
     def test_pos_neighbors(self):
         maze = Maze(20, 10)
-        pn = maze.possible_neighbors((0,0))
+        pn = maze._possible_neighbors((0,0))
         self.assertEqual(len(pn), 2)
         self.assertTrue((0,1) in pn)
         self.assertTrue((1,0) in pn)

@@ -11,9 +11,8 @@ app_name = 'char_maze.py'
 
 
 def print_map(maze_map):
-    map = maze_map.map
-    for row in range(len(map)):
-        for col in range(len(map[row])):
+    for row in range(maze_map.num_rows):
+        for col in range(maze_map.num_columns):
             cell_type = maze_map.cell_type((row, col))
             if cell_type == Cell_Type.WALL:
                 cell_ch = 'XX'
