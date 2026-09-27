@@ -121,12 +121,9 @@ class Maze:
         
 
     def create_maze_dfs(self):
-        grid = self.graph.grid
-        rows = len(grid)
-        if rows == 0:
+        if self.rows == 0:
             return
-        cols = len(grid[0])
-        if cols == 0:
+        if self.columns == 0:
             return
         self.start_cell = (0, self.random.randrange(0, self.columns))
         self.end_cell = (self.rows-1, self.random.randrange(0, self.columns))
