@@ -144,6 +144,9 @@ class Maze:
 
         explore(self.start_cell)
         return
+
+    def create_maze_dfs_iter(self):
+        return
     
     
 class Test_Cell(unittest.TestCase):
