@@ -4,6 +4,7 @@ import unittest
 from enum import Enum
 import random
 from statistics import mean
+import sys
 
 
 class _Grid_Graph():
@@ -11,11 +12,11 @@ class _Grid_Graph():
     def __init__(self, rows, columns):
         self.grid = []
         for row_index in range(rows):
-            column = []
+            row = []
             for col_index in range(columns):
                 neighbors = []
-                column.append(neighbors)
-            self.grid.append(column)
+                row.append(neighbors)
+            self.grid.append(row)
         return
 
     def neighbors(self, row, col):
@@ -120,7 +121,7 @@ class Maze:
         return pos_neighbors
         
 
-    def create_maze_dfs(self):
+    def create_maze_dfs(self, verbose = False):
         if self.rows == 0:
             return
         if self.columns == 0:
@@ -139,7 +140,17 @@ class Maze:
                 explore(step)
             return
 
+        old_recursion_limit = sys.getrecursionlimit()
+        if verbose:
+            print(f'Old Recursion Limit: {old_recursion_limit}')
+        new_recursion_limit = max((self.rows*self.columns, old_recursion_limit))
+        sys.setrecursionlimit(new_recursion_limit)
+        if verbose:
+            print(f'New Recursion Limit: {new_recursion_limit}')
+
         explore(self.start_cell)
+
+        sys.setrecursionlimit(old_recursion_limit)
         return
 
     def create_maze_dfs_iter(self):
