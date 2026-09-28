@@ -129,15 +129,21 @@ class Maze:
         self.start_cell = (0, self.random.randrange(0, self.columns))
         self.end_cell = (self.rows-1, self.random.randrange(0, self.columns))
         visited_cells = set()
+        depth_max = 0
 
-        def explore(position):
+        def explore(position, depth):
+            if verbose:
+                nonlocal depth_max
+                depth += 1
+                if depth > depth_max:
+                    depth_max = depth
             visited_cells.add(position)
             next_steps = self._possible_neighbors(position)
             for step in next_steps:
                 if step in visited_cells:
                     continue
                 self.graph.set_neighbors(position, step)
-                explore(step)
+                explore(step, depth)
             return
 
         old_recursion_limit = sys.getrecursionlimit()
@@ -148,8 +154,10 @@ class Maze:
         if verbose:
             print(f'New Recursion Limit: {new_recursion_limit}')
 
-        explore(self.start_cell)
+        explore(self.start_cell, 0)
 
+        if verbose:
+            print(f'The maximum recursion depth was {depth_max}')
         sys.setrecursionlimit(old_recursion_limit)
         return
 
