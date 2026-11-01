@@ -7,6 +7,7 @@ from sys import stdin, stdout, stderr, argv
 from getopt import getopt, GetoptError
 from time import process_time
 from maze import Maze, Cell_Type
+import png
 
 
 app_name = 'char_maze.py'
@@ -31,11 +32,12 @@ def print_map(maze_map):
 def main(arguments):
     program_name = app_name
     command_line_documentation = \
-        f'{program_name} --help --verbose rows columns'
+        f'{program_name} --help --verbose [--png file_name] rows columns'
     verbose = False
+    png_filename = None
 
     try:
-        opts, args = getopt(arguments, "hv", ("help", "verbose"))
+        opts, args = getopt(arguments, "hvp:", ("help", "verbose", "png="))
     except GetoptError as error:
         print(f'Invalid Arguments: {command_line_documentation}')
         exit(2)
@@ -47,6 +49,9 @@ def main(arguments):
 
         if opt in ('-v', '--verbose'):
             verbose = True
+
+        if opt in ('-p', '--png'):
+            png_filename = arg
 
     if len(args) != 2:
         print(f'Invalid Arguments: {command_line_documentation}')
@@ -61,7 +66,11 @@ def main(arguments):
     maze = Maze(rows, columns)
     maze.create_maze_dfs(verbose)
     map = maze.maze_map()
-    print_map(map)
+    if png_filename:
+        if verbose:
+            print(f'output to {png_filename} (not yet implemented)')
+    else:
+       print_map(map)
 
     time_end = process_time()
     print(f'Time taken: {time_end - time_start} seconds.')
