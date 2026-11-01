@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # char_maze.py
 ''' Implement a character-based maze generator'''
 
