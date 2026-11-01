@@ -83,9 +83,10 @@ def main(arguments):
     map = maze.maze_map()
     if png_filename:
         if verbose:
-            print(f'output to {png_filename} (not yet implemented)')
-        picture = get_png_rows(map)
-        print(picture)
+            print(f'output to {png_filename}')
+        picture_rows = get_png_rows(map)
+        image = png.from_array(picture_rows, "L;1")
+        image.save(png_filename)
     else:
        print_map(map)
 
