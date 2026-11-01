@@ -99,10 +99,12 @@ class Maze:
 
         if self.start_cell:
             coords = map.map_coords(self.start_cell)
-            map.set_cell_type(coords, Cell_Type.SOLUTION)
+            wall_coords = [coords[0]-1, coords[1]]
+            map.set_cell_type(wall_coords, Cell_Type.SOLUTION)
         if self.end_cell:
             coords = map.map_coords(self.end_cell)
-            map.set_cell_type(coords, Cell_Type.SOLUTION)
+            wall_coords = [coords[0]+1, coords[1]]
+            map.set_cell_type(wall_coords, Cell_Type.SOLUTION)
         return map
 
     def _possible_neighbors(self, coords):
