@@ -29,6 +29,21 @@ def print_map(maze_map):
         print()
 
 
+def get_png_rows(maze_map):
+    output = []
+    for row in range(maze_map.num_rows):
+        output_row = []
+        for col in range(maze_map.num_columns):
+            cell_type = maze_map.cell_type((row, col))
+            if cell_type == Cell_Type.WALL:
+                output_row.append(1)
+            else:
+                output_row.append(0)
+        output.append(output_row)
+    return output
+
+
+
 def main(arguments):
     program_name = app_name
     command_line_documentation = \
@@ -69,6 +84,8 @@ def main(arguments):
     if png_filename:
         if verbose:
             print(f'output to {png_filename} (not yet implemented)')
+        picture = get_png_rows(map)
+        print(picture)
     else:
        print_map(map)
 
