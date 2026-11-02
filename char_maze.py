@@ -6,7 +6,7 @@
 from sys import stdin, stdout, stderr, argv
 from getopt import getopt, GetoptError
 from time import process_time
-from maze import Maze, Cell_Type
+from maze import Maze, Maze_Map, Cell_Type
 import png
 
 
@@ -29,7 +29,7 @@ def print_map(maze_map):
         print()
 
 
-def get_png_rows(maze_map, target_width):
+def get_png_rows(maze_map: Maze_Map, target_width: int):
     output = []
     scale = target_width//max(maze_map.num_rows, maze_map.num_columns)
     for row in range(maze_map.num_rows*scale):
