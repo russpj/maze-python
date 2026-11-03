@@ -29,20 +29,26 @@ def print_map(maze_map):
         print()
 
 
-def get_png_rows(maze_map: Maze_Map, target_width: int):
+def get_png_rows(maze_map: Maze_Map, target_width: int, color_map):
     output = []
     scale = target_width//max(maze_map.num_rows, maze_map.num_columns)
     for row in range(maze_map.num_rows*scale):
         output_row = []
         for col in range(maze_map.num_columns*scale):
             cell_type = maze_map.cell_type((row//scale, col//scale))
-            if cell_type == Cell_Type.WALL:
-                output_row.append(0)
-            else:
-                output_row.append(1)
+            output_row.append(color_map[cell_type])
         output.append(output_row)
     return output
 
+
+def make_image(map: Maze_Map) -> png.Image:
+    color_map = {Cell_Type.WALL: 0,
+                 Cell_Type.TENTATIVE: 1,
+                 Cell_Type.SOLUTION: 1,
+                 Cell_Type.UNTOUCHED: 1}
+    picture_rows = get_png_rows(map, 8*96, color_map)
+    image = png.from_array(picture_rows, "L;1")
+    return image
 
 
 def main(arguments):
@@ -85,8 +91,7 @@ def main(arguments):
     if png_filename:
         if verbose:
             print(f'output to {png_filename}')
-        picture_rows = get_png_rows(map, 8*96)
-        image = png.from_array(picture_rows, "L;1")
+        image = make_image(map)
         image.save(png_filename)
     else:
        print_map(map)
