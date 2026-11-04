@@ -74,13 +74,12 @@ class Maze_Map:
         col = coords[1]
         if row > 0:
             pos_neighbors.append((row-1, col))
-        if row < self.rows-1:
+        if row < self.num_rows-1:
             pos_neighbors.append((row+1, col))
         if col > 0:
             pos_neighbors.append((row, col-1))
-        if col < self.columns-1:
+        if col < self.num_columns-1:
             pos_neighbors.append((row, col+1))
-        self.random.shuffle(pos_neighbors)
         return pos_neighbors
         
     def solve(self, verbose = False):
@@ -245,6 +244,7 @@ class Test_Maze_Map(unittest.TestCase):
         maze = Maze(20, 10)
         maze.create_maze_dfs()
         map = maze.maze_map()
+        map.solve()
         self.assertEqual(map.start_cell[0], 0)
         self.assertEqual(map.end_cell[0], map.num_rows-1)
 

@@ -56,10 +56,12 @@ def main(arguments):
     command_line_documentation = \
         f'{program_name} --help --verbose [--png file_name] rows columns'
     verbose = False
+    solve = False
     png_filename = None
 
     try:
-        opts, args = getopt(arguments, "hvp:", ("help", "verbose", "png="))
+        opts, args = getopt(arguments, "hvsp:", 
+                            ("help", "verbose", "solve", "png="))
     except GetoptError as error:
         print(f'Invalid Arguments: {command_line_documentation}')
         exit(2)
@@ -71,6 +73,9 @@ def main(arguments):
 
         if opt in ('-v', '--verbose'):
             verbose = True
+
+        if opt in ('-s', '--solve'):
+            solve = True
 
         if opt in ('-p', '--png'):
             png_filename = arg
@@ -88,6 +93,9 @@ def main(arguments):
     maze = Maze(rows, columns)
     maze.create_maze_dfs(verbose)
     map = maze.maze_map()
+    if solve:
+        map.solve(verbose)
+        
     if png_filename:
         if verbose:
             print(f'output to {png_filename}')
