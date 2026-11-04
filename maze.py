@@ -68,6 +68,50 @@ class Maze_Map:
     def set_cell_type(self, coords, cell_type):
         self.map[coords[0]][coords[1]] = _Cell(cell_type)
 
+    def _possible_neighbors(self, coords):
+        pos_neighbors = []
+        row = coords[0]
+        col = coords[1]
+        if row > 0:
+            pos_neighbors.append((row-1, col))
+        if row < self.rows-1:
+            pos_neighbors.append((row+1, col))
+        if col > 0:
+            pos_neighbors.append((row, col-1))
+        if col < self.columns-1:
+            pos_neighbors.append((row, col+1))
+        self.random.shuffle(pos_neighbors)
+        return pos_neighbors
+        
+    def solve(self, verbose = False):
+        depth_max = 0
+
+        def explore(position, depth):
+            if verbose:
+                nonlocal depth_max
+                depth += 1
+                if depth > depth_max:
+                    depth_max = depth
+            next_steps = self._possible_neighbors(position)
+            for step in next_steps:
+                pass
+            return
+
+        old_recursion_limit = sys.getrecursionlimit()
+        new_recursion_limit = max((self.num_rows*self.num_columns, 
+                                   old_recursion_limit))
+        sys.setrecursionlimit(new_recursion_limit)
+
+        explore(self.start_cell, 0)
+
+        if verbose:
+            print(f'Solving the maze')
+            print(f'Old Recursion Limit: {old_recursion_limit}')
+            print(f'New Recursion Limit: {new_recursion_limit}')
+            print(f'The maximum recursion depth was {depth_max}')
+        sys.setrecursionlimit(old_recursion_limit)
+        return
+
 
 class Maze:
     def __init__(self, rows, columns):
@@ -100,10 +144,12 @@ class Maze:
         if self.start_cell:
             coords = map.map_coords(self.start_cell)
             wall_coords = [coords[0]-1, coords[1]]
+            map.start_cell = wall_coords
             map.set_cell_type(wall_coords, Cell_Type.SOLUTION)
         if self.end_cell:
             coords = map.map_coords(self.end_cell)
             wall_coords = [coords[0]+1, coords[1]]
+            map.end_cell = wall_coords
             map.set_cell_type(wall_coords, Cell_Type.SOLUTION)
         return map
 
@@ -122,7 +168,6 @@ class Maze:
         self.random.shuffle(pos_neighbors)
         return pos_neighbors
         
-
     def create_maze_dfs(self, verbose = False):
         if self.rows == 0:
             return
@@ -195,6 +240,13 @@ class Test_Maze_Map(unittest.TestCase):
         self.assertEqual(map.num_rows, 41)
         self.assertEqual(map.num_columns, 21)
         self.assertEqual(map.map_coords((10, 5)), (21, 11))
+
+    def test_solve(self):
+        maze = Maze(20, 10)
+        maze.create_maze_dfs()
+        map = maze.maze_map()
+        self.assertEqual(map.start_cell[0], 0)
+        self.assertEqual(map.end_cell[0], map.num_rows-1)
 
 
 class Test_Maze(unittest.TestCase):
