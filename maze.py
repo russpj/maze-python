@@ -33,7 +33,7 @@ class _Grid_Graph():
 class Cell_Type(Enum):
     WALL = 1
     UNTOUCHED = 2
-    TENTATIVE = 3
+    DEADEND = 3
     SOLUTION = 4
 
 
@@ -101,7 +101,7 @@ class Maze_Map:
                     self.set_cell_type(position, Cell_Type.SOLUTION)
                     explore(step, depth)
             # this cell is at a dead end
-            self.set_cell_type(position, Cell_Type.TENTATIVE)
+            self.set_cell_type(position, Cell_Type.DEADEND)
             return
 
         old_recursion_limit = sys.getrecursionlimit()
