@@ -14,17 +14,14 @@ app_name = 'char_maze.py'
 
 
 def print_map(maze_map):
+    string_map = {Cell_Type.WALL: "XX",
+                  Cell_Type.SOLUTION: "()",
+                  Cell_Type.UNTOUCHED: "  ",
+                  Cell_Type.TENTATIVE: "++"}
     for row in range(maze_map.num_rows):
         for col in range(maze_map.num_columns):
             cell_type = maze_map.cell_type((row, col))
-            if cell_type == Cell_Type.WALL:
-                cell_ch = 'XX'
-            elif cell_type == Cell_Type.TENTATIVE:
-                cell_ch = '++'
-            elif cell_type == Cell_Type.SOLUTION:
-                cell_ch = '()'
-            else:
-                cell_ch = '  '
+            cell_ch = string_map[cell_type]
             print(cell_ch, end='')
         print()
 
@@ -95,7 +92,7 @@ def main(arguments):
     map = maze.maze_map()
     if solve:
         map.solve(verbose)
-        
+
     if png_filename:
         if verbose:
             print(f'output to {png_filename}')
