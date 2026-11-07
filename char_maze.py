@@ -40,7 +40,7 @@ def get_png_rows(maze_map: Maze_Map, target_width: int, color_map):
 
 def make_image(map: Maze_Map) -> png.Image:
     color_map = {Cell_Type.WALL: [32, 0, 96],
-                 Cell_Type.TENTATIVE: [255, 255, 255],
+                 Cell_Type.TENTATIVE: [192, 24, 24],
                  Cell_Type.SOLUTION: [0, 255, 0],
                  Cell_Type.UNTOUCHED: [255, 255, 255]}
     picture_rows = get_png_rows(map, 8*96, color_map)
