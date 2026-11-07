@@ -94,9 +94,14 @@ class Maze_Map:
             next_steps = self._possible_neighbors(position)
             # try to find another open cell
             for step in next_steps:
+                if step == self.end_cell:
+                    self.set_cell_type(position, Cell_Type.SOLUTION)
+                    raise StopIteration()
                 if self.cell_type(step) == Cell_Type.UNTOUCHED:
                     self.set_cell_type(position, Cell_Type.SOLUTION)
                     explore(step, depth)
+            # this cell is at a dead end
+            self.set_cell_type(position, Cell_Type.TENTATIVE)
             return
 
         old_recursion_limit = sys.getrecursionlimit()
@@ -104,7 +109,10 @@ class Maze_Map:
                                    old_recursion_limit))
         sys.setrecursionlimit(new_recursion_limit)
 
-        explore(self.start_cell, 0)
+        try:
+            explore(self.start_cell, 0)
+        except StopIteration:
+            pass
 
         if verbose:
             print(f'Solving the maze')
@@ -146,12 +154,12 @@ class Maze:
         if self.start_cell:
             coords = map.map_coords(self.start_cell)
             wall_coords = [coords[0]-1, coords[1]]
-            map.start_cell = wall_coords
+            map.start_cell = tuple(wall_coords)
             map.set_cell_type(wall_coords, Cell_Type.SOLUTION)
         if self.end_cell:
             coords = map.map_coords(self.end_cell)
             wall_coords = [coords[0]+1, coords[1]]
-            map.end_cell = wall_coords
+            map.end_cell = tuple(wall_coords)
             map.set_cell_type(wall_coords, Cell_Type.SOLUTION)
         return map
 
