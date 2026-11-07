@@ -92,8 +92,11 @@ class Maze_Map:
                 if depth > depth_max:
                     depth_max = depth
             next_steps = self._possible_neighbors(position)
+            # try to find another open cell
             for step in next_steps:
-                pass
+                if self.cell_type(step) == Cell_Type.UNTOUCHED:
+                    self.set_cell_type(position, Cell_Type.SOLUTION)
+                    explore(step, depth)
             return
 
         old_recursion_limit = sys.getrecursionlimit()
